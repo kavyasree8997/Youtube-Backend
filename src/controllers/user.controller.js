@@ -32,6 +32,27 @@ const registerUser = asyncHandler(async (req,res) =>{
     
 })
 
+const loginUser = asyncHandler(async (req,res)=>{
+    //get all details
+    //validate given details
+    // user exits or not
+    // verify password
+    // to do : access token , send cookies
+    const {userName,email,password} = req.body;
+    if([email,userName].some((variable)=> variable.trim()==="")){
+        throw new ApiError(404,"All fields are required");
+    }
+    const userExists = await User.findOne(email);
+    if(!userExists){
+        throw new ApiError(404,"User does not exists");
+    }
+    if(userExists.password!=password){
+        throw new ApiError(404,"Invalid password");
+    }
+    return res.status(200).json(new ApiResponse(200,{},"User logged in successfully."))
+
+})
+
 
 
 
